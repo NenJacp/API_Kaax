@@ -11,7 +11,7 @@ const connect = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-        console.log("## --Conexion Exitosa-- ##")
+        console.log("\x1b[32m%s\x1b[0m", "==> Conexion Exitosa")
 
     } catch (error) {
         console.error('## --Error de conexión-- w##', error.message);
