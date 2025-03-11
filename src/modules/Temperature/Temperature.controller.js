@@ -32,14 +32,22 @@ export const crearOActualizarTemperatura = async (req, res) => {
     }
 };
 
-// Función para obtener la temperatura actual
+// Función para obtener la temperatura actual y calcular la diferencia
 export const obtenerTemperaturaActual = async (req, res) => {
-    console.log("Entrando a obtenerTemperaturaActual"); // Log para verificar si se está entrando a la ruta
-    
     try {
-        const temperatura = await Temperatura.findOne(); // Busca el último registro
+        const temperatura = await Temperatura.findOne().sort({ createdAt: -1 }); // Busca el último registro
+
         if (temperatura) {
-            return res.json({ temperatura_actual: temperatura.tempActual });
+            const { tempPromedio, tempActual } = temperatura;
+
+            // Calcular la diferencia porcentual
+            const diferencia = ((tempActual - tempPromedio) / tempPromedio) * 100;
+
+            return res.json({
+                temperatura_actual: tempActual,
+                temperatura_promedio: tempPromedio,
+                diferencia_porcentual: diferencia.toFixed(2) // Redondear a 2 decimales
+            });
         } else {
             return res.status(404).json({ message: 'No se encontró la temperatura actual' });
         }
