@@ -44,9 +44,7 @@ export const obtenerTemperaturaActual = async (req, res) => {
             const diferencia = ((tempActual - tempPromedio) / tempPromedio) * 100;
 
             return res.json({
-                temperatura_actual: tempActual,
-                temperatura_promedio: tempPromedio,
-                diferencia_porcentual: diferencia.toFixed(2) // Redondear a 2 decimales
+                diferencia_porcentual: parseFloat(diferencia.toFixed(2)) // Redondear a 2 decimales y pasar a número
             });
         } else {
             return res.status(404).json({ message: 'No se encontró la temperatura actual' });
