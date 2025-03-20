@@ -28,16 +28,19 @@ class UserService {
     }
 
     async login(email, password) {
+        console.log(email, password);
         try {
             // Find user
             const user = await User.findOne({ email });
             if (!user) {
+                console.error('Error: User no encontrado'); // Añadido para mostrar el error de usuario no encontrado
                 throw new Error('User no encontrado');
             }
 
             // Verify password
             const isValidPassword = await bcrypt.compare(password, user.password);
             if (!isValidPassword) {
+                console.error('Error: Contraseña invalida'); // Añadido para mostrar el error de contraseña invalida
                 throw new Error('Contraseña invalida');
             }
 
@@ -57,6 +60,7 @@ class UserService {
                 token
             };
         } catch (error) {
+            console.error(`Error al loguear: ${error.message}`); // Añadido para mostrar el error del login
             throw error;
         }
     }

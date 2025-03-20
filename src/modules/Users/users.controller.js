@@ -19,12 +19,15 @@ class UserController {
     async login(req, res) {
         try {
             const { email, password } = req.body;
+            console.log(`Intentando loguear a ${email} con contraseña: ${password}`); // Añadido para mostrar el intento de login con contraseña
             const result = await _login(email, password);
+            console.log(`Login exitoso para ${email}`); // Añadido para mostrar el éxito del login
             res.status(200).json({
                 success: true,
                 data: result
             });
         } catch (error) {
+            console.error(`Error al loguear: ${error.message}`); // Añadido para mostrar el error del login
             res.status(401).json({
                 success: false,
                 message: error.message
