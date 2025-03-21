@@ -40,9 +40,7 @@ async function getEspData() {
         throw new Error('No se encontró la planta.');
     }
     return {
-        shelterActive: plant.shelterActive,
         waterRelayActive: plant.waterRelayActive,
-        water: plant.water,
     };
 }
 
