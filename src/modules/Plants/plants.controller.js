@@ -39,10 +39,30 @@ async function deletePlant(req, res) {
     }
 }
 
+async function getEsp(req, res) {
+    try {
+        const espData = await plantsService.getEspData();
+        return res.status(200).json(espData);
+    } catch (error) {
+        return res.status(404).json({ message: error.message });
+    }
+}
+
+async function updateEsp(req, res) {
+    try {
+        const updatedData = req.body; // Obtener los datos actualizados del cuerpo de la solicitud
+        const updatedPlant = await plantsService.updateEspData(updatedData);
+        return res.status(200).json(updatedPlant);
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+}
+
 export default {
     createPlant,
-    updatePlant, // Mantener el controlador de actualización
-    getPlant, // Añadir el controlador para obtener la planta
-    deletePlant, // Añadir el controlador para eliminar la planta
+    updatePlant,
+    getPlant,
+    deletePlant,
+    getEsp,
+    updateEsp,
 };
-// ... código existente ...

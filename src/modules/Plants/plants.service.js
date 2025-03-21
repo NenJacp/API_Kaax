@@ -34,10 +34,32 @@ async function deletePlant() {
     return deletedPlant; // Retorna la planta eliminada
 }
 
+async function getEspData() {
+    const plant = await Plant.findOne(); // Obtiene la única planta
+    if (!plant) {
+        throw new Error('No se encontró la planta.');
+    }
+    return {
+        shelterActive: plant.shelterActive,
+        waterRelayActive: plant.waterRelayActive,
+        water: plant.water,
+    };
+}
+
+async function updateEspData(data) {
+    const updatedPlant = await Plant.findOneAndUpdate({}, data, { new: true }); // Actualiza la única planta
+    if (!updatedPlant) {
+        throw new Error('No se encontró la planta para actualizar.');
+    }
+    return updatedPlant; // Retorna la planta actualizada
+}
+
 export default {
     createPlant,
     updatePlant,
     getPlant, // Añadir la función para obtener la planta
     deletePlant, // Añadir la función para eliminar la planta
+    getEspData, // Añadir la función para obtener datos del ESP
+    updateEspData, // Añadir la función para actualizar datos del ESP
 };
 // ... código existente ...
