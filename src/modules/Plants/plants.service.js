@@ -11,7 +11,15 @@ async function createPlant(data) {
 }
 
 async function updatePlant(data) {
-    const updatedPlant = await Plant.findOneAndUpdate({}, data, { new: true });
+    // Convertir explícitamente los valores booleanos
+    if (data.waterRelayActive !== undefined) {
+        data.waterRelayActive = Boolean(data.waterRelayActive);
+    }
+    if (data.shelterActive !== undefined) {
+        data.shelterActive = Boolean(data.shelterActive);
+    }
+    
+    const updatedPlant = await Plant.findOneAndUpdate({}, data, { new: true, runValidators: true });
     if (!updatedPlant) {
         throw new Error('No se encontró la planta para actualizar.');
     }
@@ -45,11 +53,20 @@ async function getEspData() {
 }
 
 async function updateEspData(data) {
-    const updatedPlant = await Plant.findOneAndUpdate({}, data, { new: true }); // Actualiza la única planta
+    console.log(data);
+    // Convertir explícitamente los valores booleanos
+    if (data.waterRelayActive !== undefined) {
+        data.waterRelayActive = Boolean(data.waterRelayActive);
+    }
+    if (data.shelterActive !== undefined) {
+        data.shelterActive = Boolean(data.shelterActive);
+    }
+    
+    const updatedPlant = await Plant.findOneAndUpdate({}, data, { new: true, runValidators: true });
     if (!updatedPlant) {
         throw new Error('No se encontró la planta para actualizar.');
     }
-    return updatedPlant; // Retorna la planta actualizada
+    return updatedPlant;
 }
 
 export default {
