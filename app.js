@@ -1,6 +1,6 @@
 import database from './src/core/database.js';
-import usersRouter from './src/modules/Users/users.router.js';
-import plantsRouter from './src/modules/Plants/plants.router.js';
+import usersRouter from './src/modules/Users/users.routes.js';
+import plantsRouter from './src/modules/Plants/plants.routes.js';
 import express from 'express';
 import dotenv from 'dotenv';
 

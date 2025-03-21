@@ -3,18 +3,27 @@ import mongoose from 'mongoose';
 const plantSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: true, // Obligatorio
         trim: true,
         description: 'Nombre de la planta'
     },
-
-    humidity: {
+    type: {
+        type: String,
+        required: true, // Obligatorio
+        description: 'Tipo de planta'
+    },
+    description: {
+        type: String,
+        required: true, // Obligatorio
+        description: 'Descripción de la planta'
+    },
+    soilHumidity: {
         type: Number,
         required: false,
         default: 0,
         min: 0,
         max: 100,
-        description: 'Humedad de la planta'
+        description: 'Humedad del suelo'
     },
     ambientHumidity: {
         type: Number,
@@ -32,14 +41,23 @@ const plantSchema = new mongoose.Schema({
         max: 50,
         description: 'Temperatura ambiental'
     },
-    isRaining: {
+    shelterActive: {
         type: Boolean,
         default: false,
-        description: 'Indica si está lloviendo'
+        description: 'Indica si la carpita está activa'
     },
-    lastRainDate: {
+    shelterActivationDate: {
         type: Date,
-        description: 'Fecha de la última lluvia'
+        description: 'Fecha de activación de la carpita'
+    },
+    waterRelayActive: {
+        type: Boolean,
+        default: false,
+        description: 'Indica si el relay de la bomba de agua está activo'
+    },
+    waterRelayActivationDate: {
+        type: Date,
+        description: 'Fecha de activación del relay de la bomba de agua'
     },
     water: {
         type: Number,
@@ -48,15 +66,6 @@ const plantSchema = new mongoose.Schema({
         max: 100,
         description: 'Nivel de agua'
     },
-    needsWater: {
-        type: Boolean,
-        default: false,
-        description: 'Indica si la planta necesita agua'
-    },
-    lastWaterDate: {
-        type: Date,
-        description: 'Fecha de la última vez que se regó la planta'
-    },
     // user: {
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'User',
@@ -64,9 +73,7 @@ const plantSchema = new mongoose.Schema({
     //     description: 'Referencia al usuario dueño de la planta'
     // }
 }, {
-    timestamps: true
+    timestamps: true // Obligatorio
 });
 
-const Plant = mongoose.model('Plant', plantSchema);
-
-export default Plant;
+export default mongoose.model('Plant', plantSchema);

@@ -1,91 +1,43 @@
-import Plant from './plants.model.js';
+// src/modules/Plants/plants.service.js
+import Plant from './plants.model.js'; // Cambiado a import
 
-export const createPlant = async (name, type, description) => {
-    const plant = new Plant({
-        name,
-        type,
-        description
-    });
-    await plant.save();
+async function createPlant(data) {
+    const existingPlant = await Plant.findOne({ user: data.user });
+    if (existingPlant) {
+        throw new Error('Ya existe una planta para este usuario.');
+    }
+    const newPlant = new Plant(data);
+    return await newPlant.save();
+}
+
+async function updatePlant(data) {
+    const updatedPlant = await Plant.findOneAndUpdate({}, data, { new: true });
+    if (!updatedPlant) {
+        throw new Error('No se encontró la planta para actualizar.');
+    }
+    return updatedPlant;
+}
+
+async function getPlant() {
+    const plant = await Plant.findOne(); // Obtiene la única planta
+    if (!plant) {
+        throw new Error('No se encontró la planta.');
+    }
     return plant;
-};
+}
 
-export const getPlants = async (userId) => {
-    return await Plant.find({ user: userId });
-};
-
-export const getPlantStatus = async () => {
-    const plant = await Plant.findOne();
-    if (!plant) {
-        throw new Error('No hay planta registrada en el sistema');
+async function deletePlant() {
+    const deletedPlant = await Plant.findOneAndDelete(); // Elimina la única planta
+    if (!deletedPlant) {
+        throw new Error('No se encontró la planta para eliminar.');
     }
-    return {
-        isRaining: plant.isRaining,
-        needsWater: plant.needsWater,
-        water: plant.water
-    };
+    return deletedPlant; // Retorna la planta eliminada
+}
+
+export default {
+    createPlant,
+    updatePlant,
+    getPlant, // Añadir la función para obtener la planta
+    deletePlant, // Añadir la función para eliminar la planta
 };
-
-export const updatePlantData = async (humidity, ambientHumidity, ambientTemperature) => {
-    const plant = await Plant.findOne();
-    if (!plant) {
-        throw new Error('No hay planta registrada en el sistema');
-    }
-
-    // Actualizar los datos de la planta
-    plant.humidity = humidity;
-    plant.ambientHumidity = ambientHumidity;
-    plant.ambientTemperature = ambientTemperature;
-
-    await plant.save();
-    return plant; // Devuelve la planta actualizada
-};
-
-export const updatePlantStatus = async (isRaining, needsWater, water) => {
-    const plant = await Plant.findOne();
-    if (!plant) {
-        throw new Error('No hay planta registrada en el sistema');
-    }
-
-    // Actualizar el estado de la planta
-    plant.isRaining = isRaining;
-    plant.needsWater = needsWater;
-    plant.water = water;
-
-    await plant.save();
-    return plant; // Devuelve la planta actualizada
-};
-
-export const deletePlant = async (id) => {
-    const plant = await Plant.findByIdAndDelete(id);
-    if (!plant) {
-        throw new Error('Planta no encontrada');
-    }
-    return plant; // Devuelve la planta eliminada
-};
-
-export const updateMacetaData = async (isRaining, needsWater, water, humidity, ambientHumidity, ambientTemperature) => {
-    const plant = await Plant.findOne();
-    if (!plant) {
-        throw new Error('No hay planta registrada en el sistema');
-    }
-
-    // Actualizar el estado de la planta
-    plant.isRaining = isRaining;
-    plant.needsWater = needsWater;
-    plant.water = water;
-    plant.humidity = humidity;
-    plant.ambientHumidity = ambientHumidity;
-    plant.ambientTemperature = ambientTemperature;
-
-    // Actualizar las fechas de última lluvia y riego
-    if (needsWater) {
-        plant.lastWaterDate = new Date();
-    }
-    if (isRaining) {
-        plant.lastRainDate = new Date();
-    }
-
-    await plant.save();
-    return plant; // Devuelve la planta actualizada
-};
+// ... código existente ...
